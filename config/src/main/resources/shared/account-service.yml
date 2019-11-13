@@ -1,0 +1,26 @@
+security:
+  oauth2:
+    client:
+      clientId: account-service
+      clientSecret: ${ACCOUNT_SERVICE_PASSWORD}
+      accessTokenUri: http://auth-service:5000/uaa/oauth/token
+      grant-type: client_credentials
+      scope: server
+
+spring:
+  data:
+    postgresql:
+      host: account-postgresql
+      username: user
+      password: ${POSTGRESQL_PASSWORD}
+      database: gunsofgrandeur
+      port: 27017
+      
+server:
+  servlet:
+    context-path: /accounts
+  port: 6000
+
+feign:
+  hystrix:
+    enabled: true

@@ -1,0 +1,13 @@
+spring:
+  data:
+    postgresql:
+      host: auth-postgresql
+      username: user
+      password: ${POSTGRESQL_PASSWORD}
+      database: eugenarium
+      port: 27017
+
+server:
+  servlet:
+    context-path: /uaa
+  port: 5000
