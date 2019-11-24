@@ -3,16 +3,20 @@ package com.eugenarium.statistics.persistence.domain.statistics;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
 @Entity
 @Table(name = "datapoints")
-public class DataPoint {
+public class DataPoint implements Serializable {
+
+    private static final long SerialVersionUID = 1L;
 
     @Id
-    private DataPointId id;
+    private Long id;
 
     private Set<ExerciseMetric> exercises;
 
@@ -20,11 +24,15 @@ public class DataPoint {
 
     private Map<StatisticMetric, BigDecimal> statistics;
 
-    public DataPointId getId() {
+    private String account;
+
+    private Date date;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(DataPointId id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -50,5 +58,21 @@ public class DataPoint {
 
     public void setStatistics(Map<StatisticMetric, BigDecimal> statistics) {
         this.statistics = statistics;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
