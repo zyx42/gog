@@ -51,8 +51,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         Instant instant = LocalDate.now().atStartOfDay()
                 .atZone(ZoneId.systemDefault()).toInstant();
 
-        DataPointId pointId = new DataPointId(accountName, LocalDate.from(instant));
-
         Set<ExerciseMetric> exercises = account.getExercises().stream()
                 .map(this::createExerciseMetric)
                 .collect(Collectors.toSet());
@@ -64,12 +62,11 @@ public class StatisticsServiceImpl implements StatisticsService {
         Map<StatisticMetric, BigDecimal> statistics = createStatisticMetrics(exercises, measurements);
 
         DataPoint dataPoint = new DataPoint();
-        dataPoint.setId(pointId);
         dataPoint.setExercises(exercises);
         dataPoint.setMeasurements(measurements);
         dataPoint.setStatistics(statistics);
 
-        LOGGER.debug("new datapoint has been created: {}", pointId);
+        LOGGER.debug("new datapoint has been created: {}", dataPoint.getId());
 
         return repository.save(dataPoint);
     }

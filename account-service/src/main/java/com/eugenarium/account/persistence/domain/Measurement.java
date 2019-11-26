@@ -1,6 +1,7 @@
-package com.eugenarium.statistics.persistence.domain;
+package com.eugenarium.account.persistence.domain;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "measurements")
+@Table(name = "measurements", schema = "gog")
 public class Measurement {
 
     @Id
@@ -28,14 +29,6 @@ public class Measurement {
     @NotNull
     @Column(name = "point_in_time")
     private LocalDateTime pointInTime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

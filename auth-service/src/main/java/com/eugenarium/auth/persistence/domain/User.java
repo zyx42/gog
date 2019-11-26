@@ -1,16 +1,24 @@
 package com.eugenarium.auth.persistence.domain;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "users", schema = "gog")
 public class User implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "username")
     private String username;
 
+    @Column(name = "password")
     private String password;
 
     @Override

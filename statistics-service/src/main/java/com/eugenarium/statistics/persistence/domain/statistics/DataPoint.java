@@ -1,8 +1,6 @@
 package com.eugenarium.statistics.persistence.domain.statistics;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,16 +14,24 @@ public class DataPoint implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @OneToMany(mappedBy = "datapoint_id")
     private Set<ExerciseMetric> exercises;
 
+    @OneToMany(mappedBy = "datapoint_id")
     private Set<MeasurementMetric> measurements;
 
+    @JoinTable(name = "statistics", joinColumns = @JoinColumn(name = "datapoint_id"))
+    @MapKey(name = "statistic_metric")
     private Map<StatisticMetric, BigDecimal> statistics;
 
+    @Column(name = "account")
     private String account;
 
+    @Column(name = "date")
     private Date date;
 
     public Long getId() {

@@ -1,12 +1,22 @@
 package com.eugenarium.statistics.persistence.domain.statistics;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "exercise_metrics")
 public class ExerciseMetric {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "overall_reps")
     private BigDecimal overallReps;
 
     public ExerciseMetric(String name, BigDecimal overallReps) {
