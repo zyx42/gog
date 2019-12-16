@@ -2,8 +2,8 @@ package com.eugenarium.notification.persistence.domain;
 
 public enum NotificationType {
 
-    BACKUP("backup.email.subject", "backup.email.text", "backup.email.attachment"),
-    REMIND("remind.email.subject", "remind.email.text", null);
+    BACKUP("subject", "text", "attachment"),
+    REMIND("subject", "text", null);
 
     private String subject;
     private String text;

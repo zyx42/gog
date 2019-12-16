@@ -27,6 +27,14 @@ public class Account {
     @OneToMany(mappedBy = "account_id")
     private List<Exercise> exercises;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public List<Measurement> getMeasurements() {
         return measurements;
     }

@@ -24,6 +24,10 @@ public class ExerciseMetric {
         this.overallReps = overallReps;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

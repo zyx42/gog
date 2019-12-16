@@ -2,7 +2,9 @@ version: '3.7'
 services:
   rabbitmq:
     image: rabbitmq:3-management
-    restart: always
+    restart: on-failure
+    networks:
+      - gog
     ports:
       - 15672:15672
     logging:
@@ -12,9 +14,14 @@ services:
 
   config:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: eugenarium/gunsofgrandeur-config
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+    build: config/
+    image: config
+    restart: on-failure
+    networks:
+      - gog
+    ports:
+      - 8888:8888
     logging:
       options:
         max-size: "10m"
@@ -22,12 +29,14 @@ services:
 
   registry:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: eugenarium/gunsofgrandeur-config
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+    build: registry/
+    image: registry
+    restart: on-failure
+    networks:
+      - gog
     depends_on:
-      config:
-        condition: service_healthy
+      - config
     ports:
       - 8761:8761
     logging:
@@ -37,12 +46,14 @@ services:
 
   gateway:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: eugenarium/gunsofgrandeur-config
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+    build: gateway/
+    image: gateway
+    restart: on-failure
+    networks:
+      - gog
     depends_on:
-      config:
-        condition: service_healthy
+      - config
     ports:
       - 80:4000
     logging:
@@ -52,26 +63,17 @@ services:
 
   auth-service:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-      NOTIFICATION_SERVICE_PASSWORD: $NOTIFICATION_SERVICE_PASSWORD
-      STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
-      ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-    image: eugenarium/gunsofgrandeur-auth-service
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+      NOTIFICATION_SERVICE_PASSWORD: sesame
+      STATISTICS_SERVICE_PASSWORD: sesame
+      ACCOUNT_SERVICE_PASSWORD: sesame
+    build: auth-service/
+    image: auth-service
+    restart: on-failure
+    networks:
+      - gog
     depends_on:
-      config:
-        condition: service_healthy
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  auth-db:
-    environment:
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-    image: eugenarium/gunsofgrandeur-db
-    restart: always
+      - config
     logging:
       options:
         max-size: "10m"
@@ -79,24 +81,15 @@ services:
 
   account-service:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-      ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-    image: eugenarium/gunsofgrandeur-account-service
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+      ACCOUNT_SERVICE_PASSWORD: sesame
+    build: account-service/
+    image: account-service
+    restart: on-failure
+    networks:
+      - gog
     depends_on:
-      config:
-        condition: service_healthy
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  account-db:
-    environment:
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-    image: eugenarium/gunsofgrandeur-db
-    restart: always
+      - config
     logging:
       options:
         max-size: "10m"
@@ -104,24 +97,15 @@ services:
 
   statistics-service:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-      ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-    image: eugenarium/gunsofgrandeur-account-service
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+      ACCOUNT_SERVICE_PASSWORD: sesame
+    build: statistics-service/
+    image: statistics-service
+    restart: on-failure
+    networks:
+      - gog
     depends_on:
-      config:
-        condition: service_healthy
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  statistics-db:
-    environment:
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-    image: eugenarium/gunsofgrandeur-db
-    restart: always
+      - config
     logging:
       options:
         max-size: "10m"
@@ -129,24 +113,15 @@ services:
 
   notification-service:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-      NOTIFICATION_SERVICE_PASSWORD: $NOTIFICATION_SERVICE_PASSWORD
-    image: eugenarium/gunsofgrandeur-account-service
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+      NOTIFICATION_SERVICE_PASSWORD: sesame
+    build: notification-service/
+    image: notification-service
+    restart: on-failure
+    networks:
+      - gog
     depends_on:
-      config:
-        condition: service_healthy
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  notification-db:
-    environment:
-      GOG_DB_PASSWORD: $GOG_DB_PASSWORD
-    image: eugenarium/gunsofgrandeur-db
-    restart: always
+      - config
     logging:
       options:
         max-size: "10m"
@@ -154,15 +129,37 @@ services:
 
   monitoring:
     environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: eugenarium/gunsofgrandeur-monitoring
-    restart: always
+      CONFIG_SERVICE_PASSWORD: sesame
+    build: monitoring/
+    image: monitoring
+    restart: on-failure
+    networks:
+      - gog
     depends_on:
-      config:
-        condition: service_healthy
+      - config
     ports:
       - 9000:8080
     logging:
       options:
         max-size: "10m"
         max-file: "10"
+
+  gog-db:
+    environment:
+      POSTGRES_USER: goguser
+      POSTGRES_PASSWORD: gogpassword
+      POSTGRES_DB: gog
+    build: gog-db/
+    image: gog-db
+    restart: on-failure
+    ports:
+      - 5432:5432
+    networks:
+      - gog
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+networks:
+  gog:

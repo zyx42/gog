@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 
 import java.util.*;
 
-public class CustomUserInfoTokenServices implements ResourceServerTokenServices {
+public class CustomUserInfoTokenService implements ResourceServerTokenServices {
 
     protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -36,7 +36,7 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
 
     private AuthoritiesExtractor authoritiesExtractor = new FixedAuthoritiesExtractor();
 
-    public CustomUserInfoTokenServices(String userInfoEndpointUrl, String clientId) {
+    public CustomUserInfoTokenService(String userInfoEndpointUrl, String clientId) {
         this.userInfoEndpointUrl = userInfoEndpointUrl;
         this.clientId = clientId;
     }

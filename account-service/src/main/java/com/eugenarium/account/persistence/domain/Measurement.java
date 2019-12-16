@@ -30,6 +30,14 @@ public class Measurement {
     @Column(name = "point_in_time")
     private LocalDateTime pointInTime;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

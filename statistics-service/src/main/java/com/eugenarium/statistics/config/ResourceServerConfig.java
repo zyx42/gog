@@ -1,5 +1,6 @@
 package com.eugenarium.statistics.config;
 
+import com.eugenarium.statistics.persistence.service.security.CustomUserInfoTokenService;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,16 +10,16 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 
 @EnableResourceServer
 @Configuration
-public class ResouceServerConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private final ResourceServerProperties rsp;
 
-    public ResouceServerConfig(ResourceServerProperties rsp) {
+    public ResourceServerConfig(ResourceServerProperties rsp) {
         this.rsp = rsp;
     }
 
     @Bean
     public ResourceServerTokenServices tokenServices() {
-        return new CustomUserInfoTokenServices(rsp.getUserInfoUri(), rsp.getClientId());
+        return new CustomUserInfoTokenService(rsp.getUserInfoUri(), rsp.getClientId());
     }
 }

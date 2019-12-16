@@ -3,12 +3,12 @@ spring:
     config:
       server:
         native:
-          search-location: classpath:/shared
+          search-locations: classpath:/shared
   profiles:
     active: native
   security:
     user:
-      password: ${CONFIG_SERVICE_PASSWORD}
+      password: sesame
 
 server:
   port: 8888

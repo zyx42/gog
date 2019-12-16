@@ -5,5 +5,10 @@ spring:
     config:
       uri: http://config:8888
       fail-fast: true
-      password: ${CONFIG_SERVICE_PASSWORD}
+      password: sesame
       username: user
+      retry:
+        max-attempts: 20
+        initial-interval: 3000
+        multiplier: 1.3
+        max-interval: 5000

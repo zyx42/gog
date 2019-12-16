@@ -24,6 +24,10 @@ public class MeasurementMetric {
         this.girth = girth;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
